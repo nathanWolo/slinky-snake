@@ -9,6 +9,7 @@ use serde::Serialize;
 use serde_json::{Value};
 use std::collections::HashMap;
 use std::env;
+use std::cmp::PartialEq;
 
 mod logic;
 
@@ -49,6 +50,13 @@ pub struct Coord {
     y: u32,
 }
 
+impl PartialEq for Coord {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y
+    }
+}
+
+
 #[derive(Deserialize, Serialize, Debug)]
 pub struct GameState {
     game: Game,
@@ -85,6 +93,8 @@ fn handle_move(move_req: Json<GameState>) -> Json<Value> {
 
     Json(response)
 }
+
+
 
 #[post("/end", format = "json", data = "<end_req>")]
 fn handle_end(end_req: Json<GameState>) -> Status {
